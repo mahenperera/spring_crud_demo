@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Repository
-public class StudentDAOImpl implements StudentDAO{
+public class StudentDAOImpl implements StudentDAO {
 
     private EntityManager entityManager;
 
@@ -37,6 +37,16 @@ public class StudentDAOImpl implements StudentDAO{
 
         // Student and lastName in the query are JPA Entity and Field names not database table or column names
         TypedQuery<Student> theQuery = entityManager.createQuery("FROM Student ORDER BY lastName", Student.class);
+
+        return theQuery.getResultList();
+    }
+
+    @Override
+    public List<Student> findByLastName(String theLastName) {
+
+        TypedQuery<Student> theQuery = entityManager.createQuery("FROM Student WHERE lastName=:theData", Student.class);
+
+        theQuery.setParameter("theData", theLastName);
 
         return theQuery.getResultList();
     }
