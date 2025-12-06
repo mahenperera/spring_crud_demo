@@ -20,14 +20,13 @@ public class SpringcruddemoApplication {
     public CommandLineRunner commandLineRunner(StudentDAO studentDAO) { // Inject StudentDAO
         return runner -> {
 //            createStudent(studentDAO);
-//            createMultipleStudents(studentDAO);
+            createMultipleStudents(studentDAO);
 //            readStudent(studentDAO);
 //            queryForStudents(studentDAO);
 //            queryForStudentsByLastName(studentDAO);
 //            updateStudent(studentDAO);
 //            deleteStudent(studentDAO);
-
-            deleteAllStudents(studentDAO);
+//            deleteAllStudents(studentDAO);
         };
         
     }
