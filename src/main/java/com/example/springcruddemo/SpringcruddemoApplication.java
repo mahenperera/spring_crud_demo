@@ -23,10 +23,25 @@ public class SpringcruddemoApplication {
 //            createMultipleStudents(studentDAO);
 //            readStudent(studentDAO);
 //            queryForStudents(studentDAO);
+//            queryForStudentsByLastName(studentDAO);
 
-            queryForStudentsByLastName(studentDAO);
+            updateStudent(studentDAO);
         };
         
+    }
+
+    private void updateStudent(StudentDAO studentDAO) {
+
+        int studentId = 1;
+        System.out.println("Getting student with id: " + studentId);
+        Student myStudent = studentDAO.findById(studentId);
+
+        System.out.println("Updating student ...");
+        myStudent.setFirstName("Abisheka");
+
+        studentDAO.update(myStudent);
+
+        System.out.println("Updated student: " + myStudent);
     }
 
     private void queryForStudentsByLastName(StudentDAO studentDAO) {
