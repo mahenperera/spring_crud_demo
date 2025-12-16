@@ -1,6 +1,9 @@
 package com.example.springcruddemo;
 
+import com.example.springcruddemo.dao.InstructorDAO;
 import com.example.springcruddemo.dao.StudentDAO;
+import com.example.springcruddemo.entity.Instructor;
+import com.example.springcruddemo.entity.InstructorDetail;
 import com.example.springcruddemo.entity.Student;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -17,18 +20,53 @@ public class SpringcruddemoApplication {
 	}
 
     @Bean
-    public CommandLineRunner commandLineRunner(StudentDAO studentDAO) { // Inject StudentDAO
+    public CommandLineRunner commandLineRunner(InstructorDAO instructorDAO) { // Inject StudentDAO
         return runner -> {
 //            createStudent(studentDAO);
-            createMultipleStudents(studentDAO);
+//            createMultipleStudents(studentDAO);
 //            readStudent(studentDAO);
 //            queryForStudents(studentDAO);
 //            queryForStudentsByLastName(studentDAO);
 //            updateStudent(studentDAO);
 //            deleteStudent(studentDAO);
 //            deleteAllStudents(studentDAO);
+
+//            createInstructor(instructorDAO);
+//            findInstructor(instructorDAO);
+            deleteInstructor(instructorDAO);
         };
         
+    }
+
+    private void deleteInstructor(InstructorDAO instructorDAO) {
+
+        int theId = 1;
+        System.out.println("Deleting instructor id: " + theId);
+
+        instructorDAO.deleteInstructorById(theId);
+    }
+
+    private void findInstructor(InstructorDAO instructorDAO) {
+
+        int theId = 1;
+        System.out.println("Finding instructor id: " + theId);
+
+        Instructor tempInstructor = instructorDAO.findInstructorById(theId);
+
+        System.out.println("Instructor: " + tempInstructor);
+        System.out.println("Instructor Details: " + tempInstructor.getInstructorDetail());
+    }
+
+    private void createInstructor(InstructorDAO instructorDAO) {
+
+        Instructor tempInstructor = new Instructor("Martin", "Garrix", "martin@test.com");
+
+        InstructorDetail tempInstructorDetail = new InstructorDetail("http://www.youtube.com/martin", "EDM");
+
+        tempInstructor.setInstructorDetail(tempInstructorDetail);
+
+        System.out.println("Saving instructor: " + tempInstructor);
+        instructorDAO.save(tempInstructor);
     }
 
     private void deleteAllStudents(StudentDAO studentDAO) {
