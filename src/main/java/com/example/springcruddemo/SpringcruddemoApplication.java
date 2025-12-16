@@ -33,9 +33,27 @@ public class SpringcruddemoApplication {
 
 //            createInstructor(instructorDAO);
 //            findInstructor(instructorDAO);
-            deleteInstructor(instructorDAO);
+//            deleteInstructor(instructorDAO);
+//            findInstructorDetail(instructorDAO);
+            deleteInstructorDetail(instructorDAO);
         };
-        
+    }
+
+    private void deleteInstructorDetail(InstructorDAO instructorDAO) {
+
+        int theId = 3;
+        System.out.println("Deleting instructor detail: " + theId);
+
+        instructorDAO.deleteInstructorDetailById(theId);
+    }
+
+    private void findInstructorDetail(InstructorDAO instructorDAO) {
+
+        int theId = 2;
+        InstructorDetail tempInstructorDetail = instructorDAO.findInstructorDetailById(theId);
+
+        System.out.println("Instructor Detail: " + tempInstructorDetail);
+        System.out.println("Instructor: " + tempInstructorDetail.getInstructor());
     }
 
     private void deleteInstructor(InstructorDAO instructorDAO) {
@@ -54,7 +72,7 @@ public class SpringcruddemoApplication {
         Instructor tempInstructor = instructorDAO.findInstructorById(theId);
 
         System.out.println("Instructor: " + tempInstructor);
-        System.out.println("Instructor Details: " + tempInstructor.getInstructorDetail());
+        System.out.println("Instructor Detail: " + tempInstructor.getInstructorDetail());
     }
 
     private void createInstructor(InstructorDAO instructorDAO) {
