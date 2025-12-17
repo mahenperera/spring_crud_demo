@@ -1,11 +1,15 @@
 package com.example.springcruddemo.dao;
 
+import com.example.springcruddemo.entity.Course;
 import com.example.springcruddemo.entity.Instructor;
 import com.example.springcruddemo.entity.InstructorDetail;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Repository
 public class InstructorDAOImpl implements InstructorDAO{
@@ -34,6 +38,12 @@ public class InstructorDAOImpl implements InstructorDAO{
 
         Instructor tempInstructor = entityManager.find(Instructor.class, theId);
 
+        List<Course> courses = tempInstructor.getCourses();
+
+        for (Course tempCourse : courses) {
+            tempCourse.setInstructor(null);
+        }
+
         entityManager.remove(tempInstructor);
     }
 
@@ -51,5 +61,59 @@ public class InstructorDAOImpl implements InstructorDAO{
         tempInstructorDetail.getInstructor().setInstructorDetail(null);
 
         entityManager.remove(tempInstructorDetail);
+    }
+
+    @Override
+    public List<Course> findCoursesByInstructorId(int theId) {
+
+        TypedQuery<Course> query = entityManager.createQuery(
+                                                    "FROM Course WHERE instructor.id = :data", Course.class);
+
+        query.setParameter("data", theId);
+
+        List<Course> courses = query.getResultList();
+
+        return courses;
+    }
+
+    @Override
+    public Instructor findInstructorByIdJoinFetch(int theId) {
+
+        TypedQuery<Instructor> query = entityManager.createQuery("SELECT i FROM Instructor i "
+                                                                + "JOIN FETCH i.courses "
+                                                                + "JOIN FETCH i.instructorDetail "
+                                                                + "WHERE i.id = :data", Instructor.class);
+
+        query.setParameter("data", theId);
+
+        Instructor instructor = query.getSingleResult();
+
+        return instructor;
+    }
+
+    @Override
+    @Transactional
+    public void update(Instructor theInstructor) {
+        entityManager.merge(theInstructor);
+    }
+
+    @Override
+    public Course findCourseById(int theId) {
+        return entityManager.find(Course.class, theId);
+    }
+
+    @Override
+    @Transactional
+    public void update(Course theCourse) {
+        entityManager.merge(theCourse);
+    }
+
+    @Override
+    @Transactional
+    public void deleteCourseById(int theId) {
+
+        Course tempCourse = entityManager.find(Course.class, theId);
+
+        entityManager.remove(tempCourse);
     }
 }

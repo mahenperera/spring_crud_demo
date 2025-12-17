@@ -2,6 +2,7 @@ package com.example.springcruddemo;
 
 import com.example.springcruddemo.dao.InstructorDAO;
 import com.example.springcruddemo.dao.StudentDAO;
+import com.example.springcruddemo.entity.Course;
 import com.example.springcruddemo.entity.Instructor;
 import com.example.springcruddemo.entity.InstructorDetail;
 import com.example.springcruddemo.entity.Student;
@@ -35,8 +36,104 @@ public class SpringcruddemoApplication {
 //            findInstructor(instructorDAO);
 //            deleteInstructor(instructorDAO);
 //            findInstructorDetail(instructorDAO);
-            deleteInstructorDetail(instructorDAO);
+//            deleteInstructorDetail(instructorDAO);
+//            createInstructorWithCourses(instructorDAO);
+//            findInstructorWithCourses(instructorDAO);
+//            findCoursesForInstructor(instructorDAO);
+//            findInstructorWithCoursesJoinFetch(instructorDAO);
+//            updateInstructor(instructorDAO);
+//            updateCourse(instructorDAO);
+//            deleteInstructor(instructorDAO);
+            deleteCourse(instructorDAO);
         };
+    }
+
+    private void deleteCourse(InstructorDAO instructorDAO) {
+
+        int theId = 10;
+        System.out.println("Deleting course id: " + theId);
+        instructorDAO.deleteCourseById(theId);
+    }
+
+    private void updateCourse(InstructorDAO instructorDAO) {
+
+        int theId = 10;
+        System.out.println("Finding course id: " + theId);
+        Course tempCourse = instructorDAO.findCourseById(theId);
+
+        System.out.println("Updating course id: " + theId);
+        tempCourse.setTitle("Progressive House - The Complete Guide");
+
+        instructorDAO.update(tempCourse);
+    }
+
+    private void updateInstructor(InstructorDAO instructorDAO) {
+
+        int theId = 1;
+        System.out.println("Finding instructor id: " + theId);
+        Instructor tempInstructor = instructorDAO.findInstructorById(theId);
+
+        System.out.println("Updating instructor id: " + theId);
+        tempInstructor.setLastName("Ingrosso");
+
+        instructorDAO.update(tempInstructor);
+    }
+
+    private void findInstructorWithCoursesJoinFetch(InstructorDAO instructorDAO) {
+
+        int theId = 1;
+        System.out.println("Finding instructor id: " + theId);
+        Instructor tempInstructor = instructorDAO.findInstructorByIdJoinFetch(theId);
+
+        System.out.println("Instructor: " + tempInstructor);
+        System.out.println("Courses: " + tempInstructor.getCourses());
+    }
+
+    private void findCoursesForInstructor(InstructorDAO instructorDAO) {
+
+        int theId = 1;
+        System.out.println("Finding instructor id: " + theId);
+
+        Instructor tempInstructor = instructorDAO.findInstructorById(theId);
+
+        System.out.println("Instructor: " + tempInstructor);
+
+        System.out.println("Finding courses for instructor id: " + theId);
+        List<Course> courses = instructorDAO.findCoursesByInstructorId(theId);
+
+        tempInstructor.setCourses(courses);
+
+        System.out.println("Courses: " + tempInstructor.getCourses());
+    }
+
+    private void findInstructorWithCourses(InstructorDAO instructorDAO) {
+
+        int theId = 1;
+        System.out.println("Finding instructor id: " + theId);
+
+        Instructor tempInstructor = instructorDAO.findInstructorById(theId);
+
+        System.out.println("Instructor: " + tempInstructor);
+        System.out.println("Courses: " + tempInstructor.getCourses());
+    }
+
+    private void createInstructorWithCourses(InstructorDAO instructorDAO) {
+
+        Instructor tempInstructor = new Instructor("Steve", "Angello", "steve@test.com");
+
+        InstructorDetail tempInstructorDetail = new InstructorDetail("http://www.youtube.com/steve", "EDM");
+
+        tempInstructor.setInstructorDetail(tempInstructorDetail);
+
+        Course tempCourse1 = new Course("Progressive House - The Basics");
+        Course tempCourse2 = new Course("Afro House - The Full Guide");
+
+        tempInstructor.add(tempCourse1);
+        tempInstructor.add(tempCourse2);
+
+        System.out.println("Saving instructor: " + tempInstructor);
+        System.out.println("Courses: " + tempInstructor.getCourses());
+        instructorDAO.save(tempInstructor);
     }
 
     private void deleteInstructorDetail(InstructorDAO instructorDAO) {
