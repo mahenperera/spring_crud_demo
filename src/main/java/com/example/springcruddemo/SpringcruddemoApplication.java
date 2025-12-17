@@ -1,11 +1,9 @@
 package com.example.springcruddemo;
 
+import com.example.springcruddemo.dao.CourseDAO;
 import com.example.springcruddemo.dao.InstructorDAO;
 import com.example.springcruddemo.dao.StudentDAO;
-import com.example.springcruddemo.entity.Course;
-import com.example.springcruddemo.entity.Instructor;
-import com.example.springcruddemo.entity.InstructorDetail;
-import com.example.springcruddemo.entity.Student;
+import com.example.springcruddemo.entity.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -21,7 +19,7 @@ public class SpringcruddemoApplication {
 	}
 
     @Bean
-    public CommandLineRunner commandLineRunner(InstructorDAO instructorDAO) { // Inject StudentDAO
+    public CommandLineRunner commandLineRunner(InstructorDAO instructorDAO, CourseDAO courseDAO) {
         return runner -> {
 //            createStudent(studentDAO);
 //            createMultipleStudents(studentDAO);
@@ -42,29 +40,64 @@ public class SpringcruddemoApplication {
 //            findCoursesForInstructor(instructorDAO);
 //            findInstructorWithCoursesJoinFetch(instructorDAO);
 //            updateInstructor(instructorDAO);
-//            updateCourse(instructorDAO);
+//            updateCourse(courseDAO);
 //            deleteInstructor(instructorDAO);
-            deleteCourse(instructorDAO);
+//            deleteCourse(courseDAO);
+
+//            createCourseWithReviews(courseDAO);
+//            retrieveCourseWithReviews(courseDAO);
+            deleteCourseWithReviews(courseDAO);
         };
     }
 
-    private void deleteCourse(InstructorDAO instructorDAO) {
+    private void deleteCourseWithReviews(CourseDAO courseDAO) {
 
         int theId = 10;
         System.out.println("Deleting course id: " + theId);
-        instructorDAO.deleteCourseById(theId);
+        courseDAO.deleteCourseById(theId);
     }
 
-    private void updateCourse(InstructorDAO instructorDAO) {
+    private void retrieveCourseWithReviews(CourseDAO courseDAO) {
+
+        int theId = 10;
+        Course tempCourse = courseDAO.findCourseWithReviewsByCourseId(theId);
+
+        System.out.println("Course: " + tempCourse);
+        System.out.println("Reviews: " + tempCourse.getReviews());
+    }
+
+    private void createCourseWithReviews(CourseDAO courseDAO) {
+
+        Course tempCourse = new Course("Tech House - Beginners Guide");
+
+        tempCourse.addReview(new Review("A great course for starters."));
+        tempCourse.addReview(new Review("Highly recommended for beginners."));
+        tempCourse.addReview(new Review("Good course for new learners."));
+
+        System.out.println("Saving the course");
+        System.out.println(tempCourse);
+        System.out.println(tempCourse.getReviews());
+
+        courseDAO.save(tempCourse);
+    }
+
+    private void deleteCourse(CourseDAO courseDAO) {
+
+        int theId = 11;
+        System.out.println("Deleting course id: " + theId);
+        courseDAO.deleteCourseById(theId);
+    }
+
+    private void updateCourse(CourseDAO courseDAO) {
 
         int theId = 10;
         System.out.println("Finding course id: " + theId);
-        Course tempCourse = instructorDAO.findCourseById(theId);
+        Course tempCourse = courseDAO.findCourseById(theId);
 
         System.out.println("Updating course id: " + theId);
         tempCourse.setTitle("Progressive House - The Complete Guide");
 
-        instructorDAO.update(tempCourse);
+        courseDAO.update(tempCourse);
     }
 
     private void updateInstructor(InstructorDAO instructorDAO) {
