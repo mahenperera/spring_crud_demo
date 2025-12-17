@@ -16,7 +16,9 @@ public interface StudentDAO {
 
     void update(Student theStudent);
 
-    void delete(Integer id);
+    void deleteStudentById(int id);
 
     int deleteAll();
+
+    Student findStudentAndCoursesByStudentId(int theId);
 }

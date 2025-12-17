@@ -19,7 +19,7 @@ public class SpringcruddemoApplication {
 	}
 
     @Bean
-    public CommandLineRunner commandLineRunner(InstructorDAO instructorDAO, CourseDAO courseDAO) {
+    public CommandLineRunner commandLineRunner(InstructorDAO instructorDAO, CourseDAO courseDAO, StudentDAO studentDAO) {
         return runner -> {
 //            createStudent(studentDAO);
 //            createMultipleStudents(studentDAO);
@@ -33,8 +33,10 @@ public class SpringcruddemoApplication {
 //            createInstructor(instructorDAO);
 //            findInstructor(instructorDAO);
 //            deleteInstructor(instructorDAO);
+
 //            findInstructorDetail(instructorDAO);
 //            deleteInstructorDetail(instructorDAO);
+
 //            createInstructorWithCourses(instructorDAO);
 //            findInstructorWithCourses(instructorDAO);
 //            findCoursesForInstructor(instructorDAO);
@@ -44,29 +46,89 @@ public class SpringcruddemoApplication {
 //            deleteInstructor(instructorDAO);
 //            deleteCourse(courseDAO);
 
-//            createCourseWithReviews(courseDAO);
-//            retrieveCourseWithReviews(courseDAO);
-            deleteCourseWithReviews(courseDAO);
+//            createCourseAndReviews(courseDAO);
+//            retrieveCourseAndReviews(courseDAO);
+//            deleteCourseAndReviews(courseDAO);
+
+//            createCourseAndStudents(courseDAO);
+//            findCourseAndStudents(courseDAO);
+//            findStudentAndCourses(studentDAO);
+//            addMoreCoursesForStudent(studentDAO);
+//            deleteCourse(courseDAO);
+            deleteStudent(studentDAO);
         };
     }
 
-    private void deleteCourseWithReviews(CourseDAO courseDAO) {
+    private void addMoreCoursesForStudent(StudentDAO studentDAO) {
+
+        int theId = 2;
+        Student tempStudent = studentDAO.findStudentAndCoursesByStudentId(theId);
+
+        Course tempCourse1 = new Course("The Mixing Master - Ultimate Plugin Guide");
+        Course tempCourse2 = new Course("House Music Guide");
+
+        tempStudent.addCourse(tempCourse1);
+        tempStudent.addCourse(tempCourse2);
+
+        System.out.println("Updating student: " + tempStudent);
+        System.out.println("Courses: " + tempStudent.getCourses());
+
+        studentDAO.update(tempStudent);
+    }
+
+    private void findStudentAndCourses(StudentDAO studentDAO) {
+
+        int theId = 2;
+        Student tempStudent = studentDAO.findStudentAndCoursesByStudentId(theId);
+
+        System.out.println("Student: " + tempStudent);
+        System.out.println("Courses: " + tempStudent.getCourses());
+    }
+
+    private void findCourseAndStudents(CourseDAO courseDAO) {
+
+        int theId = 10;
+        Course tempCourse = courseDAO.findCourseAndStudentsByCourseId(theId);
+
+        System.out.println("Course: " + tempCourse);
+        System.out.println("Students: " + tempCourse.getStudents());
+    }
+
+    private void createCourseAndStudents(CourseDAO courseDAO) {
+
+        Course tempCourse = new Course("Melodic Rave - Beginners Guide");
+
+        Student tempStudent1 = new Student("Mahen", "Perera", "mahen@test.com");
+        Student tempStudent2 = new Student("Martin", "Garrix", "martin@test.com");
+        Student tempStudent3 = new Student("Sebastian", "Ingrosso", "sebastian@test.com");
+
+        tempCourse.addStudent(tempStudent1);
+        tempCourse.addStudent(tempStudent2);
+        tempCourse.addStudent(tempStudent3);
+
+        System.out.println("Saving the course: " + tempCourse);
+        System.out.println("Students: " + tempCourse.getStudents());
+
+        courseDAO.save(tempCourse);
+    }
+
+    private void deleteCourseAndReviews(CourseDAO courseDAO) {
 
         int theId = 10;
         System.out.println("Deleting course id: " + theId);
         courseDAO.deleteCourseById(theId);
     }
 
-    private void retrieveCourseWithReviews(CourseDAO courseDAO) {
+    private void retrieveCourseAndReviews(CourseDAO courseDAO) {
 
         int theId = 10;
-        Course tempCourse = courseDAO.findCourseWithReviewsByCourseId(theId);
+        Course tempCourse = courseDAO.findCourseAndReviewsByCourseId(theId);
 
         System.out.println("Course: " + tempCourse);
         System.out.println("Reviews: " + tempCourse.getReviews());
     }
 
-    private void createCourseWithReviews(CourseDAO courseDAO) {
+    private void createCourseAndReviews(CourseDAO courseDAO) {
 
         Course tempCourse = new Course("Tech House - Beginners Guide");
 
@@ -226,9 +288,9 @@ public class SpringcruddemoApplication {
 
     private void deleteStudent(StudentDAO studentDAO) {
 
-        int studentId = 5;
-        System.out.println("Deleting student with id: " + studentId);
-        studentDAO.delete(studentId);
+        int theId = 3;
+        System.out.println("Deleting student with id: " + theId);
+        studentDAO.deleteStudentById(theId);
     }
 
     private void updateStudent(StudentDAO studentDAO) {

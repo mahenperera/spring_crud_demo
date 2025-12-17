@@ -12,5 +12,7 @@ public interface CourseDAO {
 
     void save(Course theCourse);
 
-    Course findCourseWithReviewsByCourseId(int theId);
+    Course findCourseAndReviewsByCourseId(int theId);
+
+    Course findCourseAndStudentsByCourseId(int theId);
 }

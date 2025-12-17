@@ -1,5 +1,6 @@
 package com.example.springcruddemo.dao;
 
+import com.example.springcruddemo.entity.Course;
 import com.example.springcruddemo.entity.Student;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
@@ -59,11 +60,20 @@ public class StudentDAOImpl implements StudentDAO {
 
     @Override
     @Transactional
-    public void delete(Integer id) {
+    public void deleteStudentById(int id) {
 
-        Student theStudent = entityManager.find(Student.class, id);
+        Student tempStudent = entityManager.find(Student.class, id);
 
-        entityManager.remove(theStudent);
+        if (tempStudent != null) {
+
+            List<Course> courses = tempStudent.getCourses();
+
+            for (Course tempCourse : courses) {
+                tempCourse.getStudents().remove(tempStudent);
+            }
+
+            entityManager.remove(tempStudent);
+        }
     }
 
     @Override
@@ -73,5 +83,19 @@ public class StudentDAOImpl implements StudentDAO {
         int numRowsDeleted = entityManager.createQuery("DELETE FROM Student").executeUpdate();
 
         return numRowsDeleted;
+    }
+
+    @Override
+    public Student findStudentAndCoursesByStudentId(int theId) {
+
+        TypedQuery<Student> query = entityManager.createQuery("SELECT s FROM Student s "
+                                                                + "JOIN FETCH s.courses "
+                                                                + "WHERE s.id = :data", Student.class);
+
+        query.setParameter("data", theId);
+
+        Student student = query.getSingleResult();
+
+        return student;
     }
 }

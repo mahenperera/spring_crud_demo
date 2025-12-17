@@ -2,11 +2,13 @@ package com.example.springcruddemo.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "student")
 public class Student {
 
-    // Fields
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -21,7 +23,12 @@ public class Student {
     @Column(name = "email")
     private String email;
 
-    // Constructors
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+                    CascadeType.DETACH, CascadeType.REFRESH},
+            mappedBy = "students")
+    private List<Course> courses;
+
     public Student() {
 
     }
@@ -31,8 +38,6 @@ public class Student {
         this.lastName = lastName;
         this.email = email;
     }
-
-    // Getters & Setters
 
     public int getId() {
         return id;
@@ -66,7 +71,14 @@ public class Student {
         this.email = email;
     }
 
-    // toString() Method
+    public List<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(List<Course> courses) {
+        this.courses = courses;
+    }
+
     @Override
     public String toString() {
         return "Student{" +
@@ -75,5 +87,15 @@ public class Student {
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 '}';
+    }
+
+    public void addCourse(Course theCourse) {
+
+        if (courses == null) {
+            courses = new ArrayList<>();
+        }
+
+        courses.add(theCourse);
+        theCourse.addStudent(this);
     }
 }
